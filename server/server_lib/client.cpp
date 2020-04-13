@@ -32,11 +32,21 @@ size_t fod_server::Client::GetMaxAttemptsNumber() const {
 }
 
 void fod_server::Client::Round() {
+  if (IsWin()) {
+    Congratulations();
+    return;
+  }
   if (attempts_ == GetMaxAttemptsNumber()) {
-    finished_ = true;
+    Lose();
     return;
   }
   ++attempts_;
+  std::string message = GetMaskedWord();
+  message += "\n";
+  client_->Write(message);
+  std::string guess = "*";
+  client_->Read(guess);
+  UpdateMask(guess[0]);
 }
 
 bool fod_server::Client::Finished() const {
@@ -53,4 +63,35 @@ std::string fod_server::Client::GetMaskedWord() const {
     }
   }
   return std::move(result);
+}
+
+void fod_server::Client::UpdateMask(char letter) {
+  for (int i = 0; i < word_.size(); ++i) {
+    if (word_[i] == letter) {
+      guessed_[i] = true;
+    }
+  }
+}
+
+bool fod_server::Client::IsWin() const {
+  for (auto guessed : guessed_) {
+    if (!guessed) {
+      return false;
+    }
+  }
+  return true;
+}
+
+void fod_server::Client::Lose() {
+  client_->Write("You lose:(\n");
+  std::string message = "The word was: " + GetWord() + "\n";
+  client_->Write(message);
+  finished_ = true;
+}
+
+void fod_server::Client::Congratulations() {
+  client_->Write("You win!!\n");
+  std::string message = "You guessed the word: " + GetWord() + "\n";
+  client_->Write(message);
+  finished_ = true;
 }

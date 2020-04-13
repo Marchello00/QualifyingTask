@@ -18,15 +18,21 @@ class Client {
 
   void ShowAttempts();
 
-  size_t GetMaxAttemptsNumber() const;
-
   bool Finished() const;
 
   void Round();
 
-  void Reset();
+ private:
+  size_t GetMaxAttemptsNumber() const;
 
   std::string GetMaskedWord() const;
+
+  void UpdateMask(char letter);
+
+  bool IsWin() const;
+
+  void Lose();
+  void Congratulations();
 
  private:
   std::shared_ptr<fod_networking::Socket> client_;

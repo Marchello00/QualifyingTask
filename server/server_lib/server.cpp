@@ -21,11 +21,12 @@ void fod_server::Server::Run(int port, const std::string& dict_path) {
 void fod_server::Server::ServeClient(std::shared_ptr<Socket> client_ptr) {
   Client client(client_ptr);
   client.Greeting();
+  // TODO: while true + another game
   auto word = dictionary_.GetNextWord();
   client.SetNewWord(word);
   client.ShowAttempts();
-  while (true) {
-
+  while (!client.Finished()) {
+    client.Round();
   }
 }
 
