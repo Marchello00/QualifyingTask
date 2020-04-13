@@ -21,7 +21,7 @@ int main(int argc, char* argv[]) {
   fod_networking::SetupNetworking();
 
   fod_server::Server server;
-  server.Run(0, "data/dictionary.txt");
+  server.Run(parser.GetPort(), "data/dictionary.txt");
 
   fod_networking::CleenupNetworking();
 

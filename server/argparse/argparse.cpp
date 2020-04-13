@@ -14,3 +14,7 @@ bool argparse::Argparse::ParseArgs(int argc, char** argv) {
   port_ = std::stoi(argv[1], NULL, 10);
   return true;
 }
+
+int argparse::Argparse::GetPort() const {
+  return port_;
+}

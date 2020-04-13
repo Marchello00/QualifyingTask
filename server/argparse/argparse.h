@@ -10,6 +10,8 @@ class Argparse {
 
   bool ParseArgs(int argc, char* argv[]);
 
+  int GetPort() const;
+
  private:
   int port_;
 };
